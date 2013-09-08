@@ -3,6 +3,7 @@ package passwordstore;
 
 import java.io.File;
 import java.io.IOException;
+import javax.swing.JOptionPane;
 
 /**
  * This method will ensure that the correct file exists or is created.

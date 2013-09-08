@@ -9,6 +9,7 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
@@ -26,6 +27,16 @@ public class Frame extends JPanel
     
     public Frame()
     {
+        try
+        {
+            FileCreate fileCreate = new FileCreate();
+            dataArray = new DataArray(fileCreate.getFileName());
+            dataArray.loadAllData();
+        } catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        
         frame = new JFrame();
         frame.setTitle("Password Store by Twiz");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -63,7 +74,24 @@ public class Frame extends JPanel
             @Override
             public void actionPerformed(ActionEvent e)
             {
-                
+                try
+                {
+                    if(siteEntry.getText().length() > 0 && userEntry.getText().length() > 0 && passEntry.getText().length() > 0)
+                    {
+                        dataArray.addData(siteEntry.getText(), userEntry.getText(), passEntry.getText());
+                        siteEntry.setText("");
+                        userEntry.setText("");
+                        passEntry.setText("");
+                        searchEntry.setText("");
+                        JOptionPane.showMessageDialog(frame, "New entry added");
+                    }else
+                    {
+                        JOptionPane.showMessageDialog(frame, "All three fields must be filled in.");
+                    }
+                } catch (Exception ex)
+                {
+                    System.out.println(ex);
+                }
             }
         });
         this.add(addButton);
@@ -82,7 +110,22 @@ public class Frame extends JPanel
             @Override
             public void actionPerformed(ActionEvent e)
             {
-                
+                if(searchEntry.getText().length() > 0)
+                {
+                    Data d = dataArray.findData(searchEntry.getText());
+                    if(d != null)
+                    {
+                        JOptionPane.showMessageDialog(frame, "<html>" 
+                                + d.getSite() + "<br />" 
+                                + d.getUserName() + "<br />" 
+                                + d.getPassword() + "<br />" 
+                                + "</html>");
+                        searchEntry.setText("");
+                    }else
+                    {
+                        JOptionPane.showMessageDialog(frame, "No record found");
+                    }
+                }
             }
         });
         this.add(searchButton);
@@ -98,7 +141,15 @@ public class Frame extends JPanel
             @Override
             public void actionPerformed(ActionEvent e)
             {
-                
+                if(searchEntry.getText().equalsIgnoreCase("clearall"))
+                {
+                    try
+                    {
+                        dataArray.delAllData();
+                    } catch (Exception ex)
+                    {
+                    }
+                }
             }
         });
         this.add(delButton);
@@ -115,6 +166,6 @@ public class Frame extends JPanel
     {
         g.setColor(Color.black);
         g.drawRect(8, 5, 160, 130);
-        g.drawRect(233, 5, 160, 50);
+        g.drawRect(234, 5, 160, 50);
     }
 }

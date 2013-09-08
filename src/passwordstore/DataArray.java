@@ -68,8 +68,37 @@ public class DataArray
         fileRW.writeToFile(d.toString());
     }
     
-    public void getAllData() throws FileNotFoundException, IOException
+    public void loadAllData() throws FileNotFoundException, IOException
     {
-        fileRW.readFromFile();
+        ArrayList<String> rawData = fileRW.readFromFile();
+        for (int i = 0; i < rawData.size(); i++)
+        {
+            String site, user, pass;
+            if(rawData.get(i).startsWith("£$£$£"))
+            {
+                site = rawData.get(i).split("#&#&")[0].replace("£$£$£", "");
+                user = rawData.get(i).split("#&#&")[1];
+                pass = rawData.get(i).split("#&#&")[2];
+                dataArray.add(new Data(site, user, pass));
+            }
+        }
+        System.out.println(dataArray.size());
+    }
+    
+    public void delAllData() throws IOException
+    {
+        fileRW.clearFile();
+    }
+    
+    public Data findData(String site)
+    {
+        for(Data d: dataArray)
+        {
+            if(d.getSite().equalsIgnoreCase(site))
+            {
+                return d;
+            }
+        }
+        return null;
     }
 }

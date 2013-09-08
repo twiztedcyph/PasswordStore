@@ -49,6 +49,6 @@ public class Data
     @Override
     public String toString()
     {
-        return this.site + "#&#&" + this.userName + "#&#&" + this.password;
+        return "£$£$£" + this.site + "#&#&" + this.userName + "#&#&" + this.password;
     }
 }
